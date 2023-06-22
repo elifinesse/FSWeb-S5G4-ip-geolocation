@@ -79,7 +79,7 @@ function geoLoc(geoLocObj) {
   ipText.classList.add("ip");
   ipText.textContent = geoLocObj.sorgu;
   cardInfoDiv.appendChild(ipText);
-  cardInfoDiv.innerHTML += `<p class="ulke">${geoLocObj["ülke"]}</p>
+  cardInfoDiv.innerHTML += `<p class="ulke">${geoLocObj["ülke"]} (${geoLocObj["ülkeKodu"]})</p>
   <p>Enlem: ${geoLocObj.enlem} Boylam: ${geoLocObj.boylam}</p>
   <p>Şehir: ${geoLocObj["şehir"]}</p>
   <p>Saat dilimi: ${geoLocObj.saatdilimi}</p>
@@ -88,7 +88,16 @@ function geoLoc(geoLocObj) {
   document.querySelector(".cards").appendChild(cardDiv);
 }
 
-axios
-  .get("https://apis.ergineer.com/ipgeoapi/188.3.99.101")
-  .then((response) => geoLoc(response.data))
-  .catch((error) => console.log(error));
+async function getData(ipAdd) {
+  await axios
+    .get(`https://apis.ergineer.com/ipgeoapi/${ipAdd}`)
+    .then((response) => geoLoc(response.data))
+    .catch((error) => console.log(error));
+}
+async function start() {
+  await ipAdresimiAl();
+
+  getData(benimIP);
+}
+
+start();

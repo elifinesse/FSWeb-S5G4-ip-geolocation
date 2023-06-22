@@ -1,26 +1,24 @@
-//axios import buraya gelecek
+import axios from "axios";
 
 var benimIP;
-
 
 // ------------ değiştirmeyin --------------
 // licensed to Ergineer 2022
 require("babel-core/register");
 require("babel-polyfill");
-async function ipAdresimiAl(){
-	await axios({
-		method: 'get',
-		url: 'https://apis.ergineer.com/ipadresim',
-	})
-	.then(function (response) {
-		return response.data
-	})
-	.then(function (a) {
-		benimIP=a
-	});
-}				
+async function ipAdresimiAl() {
+  await axios({
+    method: "get",
+    url: "https://apis.ergineer.com/ipadresim",
+  })
+    .then(function (response) {
+      return response.data;
+    })
+    .then(function (a) {
+      benimIP = a;
+    });
+}
 // ------------ değiştirmeyin --------------
-
 
 /*
 	ADIM 1: axios kullanarak, aşağıdaki URL'ye GET sorgusu atacağız
@@ -67,6 +65,30 @@ async function ipAdresimiAl(){
 	Örnek dinamik URL kullanımı: var url = "https://apis.ergineer.com/ipgeoapi/"+benimIP; 
 */
 
-
-
 //kodlar buraya gelecek
+
+function geoLoc(geoLocObj) {
+  const cardDiv = document.createElement("div");
+  cardDiv.classList.add("card");
+  const flagImg = document.createElement("img");
+  flagImg.src = geoLocObj.ulkeBayragi;
+  const cardInfoDiv = document.createElement("div");
+  cardInfoDiv.classList.add("card-info");
+  cardDiv.append(flagImg, cardInfoDiv);
+  const ipText = document.createElement("h3");
+  ipText.classList.add("ip");
+  ipText.textContent = geoLocObj.sorgu;
+  cardInfoDiv.appendChild(ipText);
+  cardInfoDiv.innerHTML += `<p class="ulke">${geoLocObj["ülke"]}</p>
+  <p>Enlem: ${geoLocObj.enlem} Boylam: ${geoLocObj.boylam}</p>
+  <p>Şehir: ${geoLocObj["şehir"]}</p>
+  <p>Saat dilimi: ${geoLocObj.saatdilimi}</p>
+  <p>Para birimi: ${geoLocObj.parabirimi}</p>
+  <p>ISP: ${geoLocObj.isp}</p>`;
+  document.querySelector(".cards").appendChild(cardDiv);
+}
+
+axios
+  .get("https://apis.ergineer.com/ipgeoapi/188.3.99.101")
+  .then((response) => geoLoc(response.data))
+  .catch((error) => console.log(error));
